@@ -54,31 +54,28 @@ func (game *Game) MakeTurn() {
 	objects := make([]IGameObject, len(game.GameObjects))
 	copy(objects, game.GameObjects)
 
-	for i := 0; i < len(objects); i++ {
-		object := objects[i]
+	for _, object := range objects {
 		object.Move()
 	}
 
 	newObjects := make([]IGameObject, 0)
-	for i := 0; i < len(objects); i++ {
-		object := objects[i]
+
+	for _, object := range objects {
 		newObject := object.CreateNewObject()
 		if newObject != nil {
 			newObjects = append(newObjects, newObject)
 		}
 	}
 
-	for i := 0; i < len(newObjects); i++ {
-		objects = append(objects, newObjects[i])
+	for _, object := range newObjects {
+		objects = append(objects, object)
 	}
 
-	for i := 0; i < len(objects); i++ {
-		object := objects[i]
-		for j := 0; j < len(game.GameObjects); j++ {
+	for i, object := range objects {
+		for j, otherObject := range objects {
 			if i == j {
 				continue
 			}
-			otherObject := game.GameObjects[j]
 			if game.isCollide(object, otherObject) {
 				object.SolveCollision(otherObject)
 			}
@@ -86,10 +83,9 @@ func (game *Game) MakeTurn() {
 	}
 
 	newObjects = make([]IGameObject, 0)
-	for i := 0; i < len(objects); i++ {
-		object := objects[i]
+	for _, object := range objects {
 		if !object.IsDead() {
-			newObjects = append(newObjects, objects[i])
+			newObjects = append(newObjects, object)
 		}
 	}
 
