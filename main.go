@@ -86,14 +86,10 @@ func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 func WriteToConnections(controllers []*Controller, game *game.Game) {
 	for i := 0; i < len(controllers); i++ {
 		controller := controllers[i]
-		breakFlag := false
-		for !breakFlag {
-			select {
+		select {
 			case controller.writeChannel <- GetGlobalState(game, controller.model):
-				breakFlag = true
 			default:
-				breakFlag = true
-			}
 		}
 	}
 }
+
