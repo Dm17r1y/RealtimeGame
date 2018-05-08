@@ -6,9 +6,10 @@ import (
 	"html/template"
 	"net/http"
 	"./game"
+	"strconv"
 )
 
-const addr = "127.0.0.1:8080"
+var addr string
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
@@ -83,9 +84,10 @@ func WriteMessages(c chan *GlobalState, conn *websocket.Conn) {
 }
 
 func startServer() {
+	addr = host + ":" + strconv.Itoa(port)
 	m := martini.Classic()
 	m.Get("/", httpHandler)
 	m.Get("/ws", wsHandler)
 	m.Use(martini.Static(""))
-	m.RunOnAddr(addr)
+	m.RunOnAddr("0.0.0.0:" + strconv.Itoa(port))
 }
