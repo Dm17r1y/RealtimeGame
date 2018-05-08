@@ -66,8 +66,17 @@ func GetGlobalState(g *game.Game, model *game.PlayerModel) *GlobalState {
 	states := make([]*State, 0)
 	for i := 0; i < len(g.GameObjects); i++ {
 		object := g.GameObjects[i]
+		var objectType string
+
+		switch object.(type) {
+		case *game.Bullet:
+			objectType = "Bullet"
+		case *game.PlayerModel:
+			objectType = "Player"
+		}
+
 		states = append(states, &State{point: object.GetPosition(), direction: object.GetVector(),
-			objectType: object.GetTypeName()})
+			objectType: objectType})
 	}
 	var position *game.Point
 	if model == nil {

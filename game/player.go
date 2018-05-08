@@ -28,10 +28,6 @@ func (model *PlayerModel) Move() {
 	model.position = Bound(model.position.AddVector(model.direction.MultiplyByScalar(float64(PLAYER_SPEED))))
 }
 
-func (model *PlayerModel) GetTypeName() string {
-	return "Player"
-}
-
 func (model *PlayerModel) SolveCollision(object IGameObject) {
 	switch object.(type) {
 	case *Bullet:

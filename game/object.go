@@ -9,7 +9,6 @@ type IGameObject interface {
 	GetVector() *Vector
 	GetAreaRadius() float64
 	CreateNewObject() IGameObject
-	GetTypeName() string
 }
 
 type GameObject struct {

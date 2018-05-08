@@ -30,7 +30,3 @@ func (bullet *Bullet) GetVector() *Vector {
 func (bullet *Bullet) CreateNewObject() IGameObject {
 	return nil
 }
-
-func (bullet *Bullet) GetTypeName() string {
-	return "Bullet"
-}

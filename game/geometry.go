@@ -2,7 +2,7 @@ package game
 
 import (
 	"math"
-	"strconv"
+	"fmt"
 )
 
 type Point struct {
@@ -20,9 +20,8 @@ func (point *Point) AddVector(vector *Vector) *Point {
 	return p
 }
 
-func (point *Point) ToString() string {
-	return "(" + strconv.FormatFloat(point.X, 'f', 1, 64) + ", " +
-		strconv.FormatFloat(point.Y, 'f', 1, 64) + ")"
+func (point Point) String() string {
+	return fmt.Sprintf("(%.1f, %.1f)", point.X, point.Y)
 }
 
 type Vector struct {
@@ -57,9 +56,8 @@ func (vector *Vector) MultiplyByScalar(scalar float64) *Vector {
 	return &Vector{vector.AngleInRadian, vector.Length * scalar}
 }
 
-func (vector *Vector) ToString() string {
-	return "Vector(" + strconv.FormatFloat(vector.GetX(), 'f', 1, 64) + ", " +
-		strconv.FormatFloat(vector.GetY(), 'f', 1, 64) + ")"
+func (vector Vector) String() string {
+	return fmt.Sprintf("Vector(%.1f, %.1f)", vector.GetX(), vector.GetY())
 }
 
 func (vector *Vector) Normalize() *Vector {
