@@ -15,7 +15,7 @@ export GOPATH=~/go
 go get https://github.com/go-martini/martini
 go get https://github.com/gorilla/websocket
 ```
-Запуск из директории
+Запуск из текущей директории
 ```
 go run *.go
 ```
