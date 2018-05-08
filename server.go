@@ -52,12 +52,11 @@ func wsHandler(writer http.ResponseWriter, request *http.Request) {
 
 func ReadMessages(c chan *MessageData, conn *websocket.Conn, writer http.ResponseWriter) {
 
-	/* defer func() {
+	defer func() {
 		recover()
-		log.Println(123)
 		conn.Close()
 		c <- nil
-	}() */
+	}()
 
 	for {
 		var data map[string]interface{}
