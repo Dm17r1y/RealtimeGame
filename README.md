@@ -12,8 +12,8 @@ export GOPATH=~/go
 
 Установка зависимостей
 ```
-go get https://github.com/go-martini/martini
-go get https://github.com/gorilla/websocket
+go get github.com/go-martini/martini
+go get github.com/gorilla/websocket
 ```
 Запуск из текущей директории
 ```

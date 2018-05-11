@@ -9,14 +9,12 @@ import (
 	"strconv"
 )
 
-var addr string
-
 func httpHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Host string
 		MaxWidth int
 		MaxHeight int
-	}{addr, game.MAX_WIDTH, game.MAX_HEIGHT}
+	}{host + ":" + string(port), game.MAX_WIDTH, game.MAX_HEIGHT}
 
 	mainTemplate, err := template.ParseFiles("templates/main.html")
 	if err != nil {
@@ -42,10 +40,10 @@ func wsHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	readChannel := make(chan *MessageData, 1024)
+	readChannel := make(chan *MessageData, 100)
 	go ReadMessages(readChannel, conn, writer)
 
-	writeChannel := make(chan *GlobalState, 1024)
+	writeChannel := make(chan *GlobalState, 100)
 	go WriteMessages(writeChannel, conn)
 
 	AddController(readChannel, writeChannel)
@@ -53,18 +51,12 @@ func wsHandler(writer http.ResponseWriter, request *http.Request) {
 
 func ReadMessages(c chan *MessageData, conn *websocket.Conn, writer http.ResponseWriter) {
 
-	defer func() {
-		recover()
-		conn.Close()
-		c <- nil
-	}()
-
 	for {
 		var data map[string]interface{}
 		err := conn.ReadJSON(&data)
 		if err != nil {
 			conn.Close()
-			c <- nil
+			close(c)
 			return
 		}
 
@@ -73,8 +65,7 @@ func ReadMessages(c chan *MessageData, conn *websocket.Conn, writer http.Respons
 }
 
 func WriteMessages(c chan *GlobalState, conn *websocket.Conn) {
-	for {
-		msg := <-c
+	for msg := range c {
 		err := conn.WriteJSON(msg.ToJsonMap())
 		if err != nil {
 			conn.Close()
@@ -84,7 +75,6 @@ func WriteMessages(c chan *GlobalState, conn *websocket.Conn) {
 }
 
 func startServer() {
-	addr = host + ":" + strconv.Itoa(port)
 	m := martini.Classic()
 	m.Get("/", httpHandler)
 	m.Get("/ws", wsHandler)
