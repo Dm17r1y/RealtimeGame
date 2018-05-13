@@ -13,25 +13,45 @@ function render(currentLocation, allObjects) {
             drawBullet(context, obj);
         }
     }
-    console.log(currentLocation, allObjects)
 }
 
-function drawBorders(context, canvasWidth, canvasHeight, borderWidth) {
-    context.fillStyle = "black";
-    context.fillRect(0, 0, canvasWidth, borderWidth);
-    context.fillRect(0, 0, borderWidth, canvasHeight);
-    context.fillRect(0, canvasHeight - borderWidth, canvasWidth, canvasHeight);
-    context.fillRect(canvasWidth - borderWidth, 0, canvasWidth, canvasHeight);
+function drawBorders(ctx, canvasWidth, canvasHeight, borderWidth) {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvasWidth, borderWidth);
+    ctx.fillRect(0, 0, borderWidth, canvasHeight);
+    ctx.fillRect(0, canvasHeight - borderWidth, canvasWidth, canvasHeight);
+    ctx.fillRect(canvasWidth - borderWidth, 0, canvasWidth, canvasHeight);
 }
 
-function drawPlayer(context, player) {
-    context.fillStyle = "green";
-    context.beginPath();
-    context.arc(player["point"]["x"], player["point"]["y"], 25, 0, 2 * Math.PI);
-    context.fill();
+function drawPlayer(ctx, player) {
+    drawPlayerBody(ctx, player.point.x, player.point.y);
+    drawPlayerGun(ctx, player.point.x, player.point.y, 25, player.direction)
 }
 
-function drawBullet(context, bullet) {
-    context.fillStyle = "yellow";
-    context.fillRect(bullet["point"]["x"] - 5, bullet["point"]["y"] - 5, 10, 10);
+function drawPlayerBody(ctx, x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 25, 0, 2 * Math.PI);
+    ctx.fillStyle = "green";
+    ctx.fill();
+}
+
+function drawPlayerGun(ctx, x, y, length, rotationAngle) {
+    // ctx.save();
+    // ctx.beginPath();
+    // ctx.translate(x, y);
+    // ctx.rotate(rotationAngle - Math.PI / 2);
+    // ctx.rect(-width / 2, 0, width, height);
+    // ctx.fillStyle = "red";
+    // ctx.fill();
+    // ctx.restore();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + Math.cos(rotationAngle) * length, y + Math.sin(rotationAngle) * length);
+    ctx.strokeStyle = "red";
+    ctx.stroke()
+}
+
+function drawBullet(ctx, bullet) {
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(bullet.point.x - 5, bullet.point.y - 5, 10, 10);
 }

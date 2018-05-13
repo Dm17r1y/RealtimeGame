@@ -4,6 +4,4 @@ type Command struct {
 	Shoot *Shoot
 }
 
-type Shoot struct {
-	Vector *Vector
-}
+type Shoot struct {}

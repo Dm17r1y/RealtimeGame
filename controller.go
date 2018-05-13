@@ -75,7 +75,7 @@ func GetGlobalState(g *game.Game, model *game.PlayerModel) *GlobalState {
 			objectType = "Player"
 		}
 
-		states = append(states, &State{point: object.GetPosition(), direction: object.GetVector(),
+		states = append(states, &State{point: object.GetPosition(), direction: object.GetDirection(),
 			objectType: objectType})
 	}
 	var position *game.Point
@@ -95,9 +95,11 @@ func (state *GlobalState) ToJsonMap() map[string]interface{} {
 		currentState := state.states[i]
 		stateMap := make(map[string]interface{})
 		stateMap["objectType"] = currentState.objectType
-		stateMap["point"] = map[string]int{"x": int(currentState.point.X), "y": int(currentState.point.Y)}
-		stateMap["direction"] = map[string]int{"x": int(currentState.direction.GetX()),
-			"y": int(currentState.direction.GetY())}
+		stateMap["point"] = map[string]int{
+			"x": int(currentState.point.X),
+			"y": int(currentState.point.Y),
+		}
+		stateMap["direction"] = currentState.direction.AngleInRadian
 		data = append(data, stateMap)
 	}
 	jsonMap["render"] = data

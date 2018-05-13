@@ -60,6 +60,7 @@ func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 	}
 	direction := game.NewVector(data.MouseLocation.X-controller.model.GetPosition().X,
 		data.MouseLocation.Y-controller.model.GetPosition().Y).Normalize()
+	controller.model.SetDirection(direction)
 	// Old
 	//up := &game.Vector{AngleInRadian: direction.AngleInRadian, Length: direction.Length}
 	//down := &game.Vector{AngleInRadian: direction.AngleInRadian + math.Pi, Length: direction.Length}
@@ -82,9 +83,10 @@ func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 	if data.Movement.Right {
 		vector = vector.Add(right)
 	}
-	controller.model.SetDirection(vector.Normalize())
+	controller.model.SetMovement(vector.Normalize())
+
 	if data.Shoot {
-		controller.model.SetCommand(&game.Command{&game.Shoot{direction}})
+		controller.model.SetCommand(&game.Command{&game.Shoot{}})
 	}
 }
 

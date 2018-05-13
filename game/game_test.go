@@ -46,7 +46,7 @@ func TestPlayerMovement(t *testing.T) {
 	g := NewGame()
 	player := NewPlayer(&Point{0, 0}, g)
 	g.AddGameObject(player)
-	player.direction = NewVector(1, 0)
+	player.movementDirection = NewVector(1, 0)
 	g.MakeTurn()
 	if player.GetPosition().X != PLAYER_SPEED || player.GetPosition().Y != 0 {
 		t.Error(fmt.Sprintf("Expected (%.1f, 0.0), got %s", float64(BULLET_SPEED), player.GetPosition()))
@@ -68,7 +68,7 @@ func TestPlayerShoot(t *testing.T) {
 		return
 	}
 	bullet := g.GameObjects[1].(*Bullet)
-	vector := bullet.GetVector()
+	vector := bullet.GetMovementDirection()
 	if vector.GetX() != BULLET_SPEED || vector.GetY() != 0 {
 		t.Error(fmt.Sprintf("Expected bullet position Vector(%.1f, 0.0), got %s", float64(BULLET_SPEED), vector))
 		return

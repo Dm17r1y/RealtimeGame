@@ -5,17 +5,18 @@ type IGameObject interface {
 	SolveCollision(otherObject IGameObject)
 	IsDead() bool
 	GetPosition() *Point
+	GetMovementDirection() *Vector
 	GetDirection() *Vector
-	GetVector() *Vector
 	GetAreaRadius() float64
 	CreateNewObject() IGameObject
 }
 
 type GameObject struct {
-	position   *Point
-	direction  *Vector
-	areaRadius float64
-	isDead     bool
+	position          *Point
+	movementDirection *Vector
+	direction         *Vector
+	areaRadius        float64
+	isDead            bool
 }
 
 func (object *GameObject) IsDead() bool {

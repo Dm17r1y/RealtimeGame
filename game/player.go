@@ -12,12 +12,21 @@ const PLAYER_SPEED = 3
 var defaultCommand = Command{nil}
 
 func NewPlayer(point *Point, currentGame *Game) *PlayerModel {
-	return &PlayerModel{GameObject{point, NewVector(0, 0),
-		PLAYER_RADIUS, false}, currentGame, &defaultCommand}
+	return &PlayerModel{GameObject {
+		position: point,
+		movementDirection: NewVector(0, 0),
+		direction: NewVector(0, 0),
+		areaRadius: PLAYER_RADIUS,
+		isDead: false,
+	}, currentGame, &defaultCommand}
 }
 
 func (model *PlayerModel) SetCommand(command *Command) {
 	model.command = command
+}
+
+func (model *PlayerModel) SetMovement(direction *Vector) {
+	model.movementDirection = direction
 }
 
 func (model *PlayerModel) SetDirection(direction *Vector) {
@@ -25,7 +34,7 @@ func (model *PlayerModel) SetDirection(direction *Vector) {
 }
 
 func (model *PlayerModel) Move() {
-	model.position = Bound(model.position.AddVector(model.direction.MultiplyByScalar(float64(PLAYER_SPEED))))
+	model.position = Bound(model.position.AddVector(model.movementDirection.MultiplyByScalar(float64(PLAYER_SPEED))))
 }
 
 func (model *PlayerModel) SolveCollision(object IGameObject) {
@@ -38,15 +47,15 @@ func (model *PlayerModel) SolveCollision(object IGameObject) {
 	}
 }
 
-func (model *PlayerModel) GetVector() *Vector {
-	return model.GetDirection().MultiplyByScalar(PLAYER_SPEED)
+func (model *PlayerModel) GetMovementDirection() *Vector {
+	return model.movementDirection.MultiplyByScalar(PLAYER_SPEED)
 }
 
 func (model *PlayerModel) CreateNewObject() IGameObject {
 	shoot := model.command.Shoot
 	if shoot != nil {
 		model.command.Shoot = nil
-		return NewBullet(model.position, shoot.Vector, model)
+		return NewBullet(model.position, model.direction, model)
 	}
 	return nil
 }
