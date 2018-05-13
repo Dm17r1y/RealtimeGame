@@ -69,7 +69,7 @@ $(document).ready(function () {
         setInterval(function () {
             conn.send(JSON.stringify({"movement": movement, "mouseLocation": mouseLocation, "shoot": shoot}));
             shoot = false;
-        }, 1000 / 30)
+        }, 1000 / 60)
 
     } else {
         alert("Cant connect by websocket")

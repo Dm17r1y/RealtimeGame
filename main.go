@@ -11,7 +11,7 @@ func main() {
 	g := game.NewGame()
 	go startServer()
 
-	ticker := time.NewTicker(time.Millisecond * 1000 / 30)
+	ticker := time.NewTicker(time.Millisecond * 1000 / 60)
 	var wg sync.WaitGroup
 
 	wg.Add(1)
@@ -60,10 +60,15 @@ func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 	}
 	direction := game.NewVector(data.MouseLocation.X-controller.model.GetPosition().X,
 		data.MouseLocation.Y-controller.model.GetPosition().Y).Normalize()
-	up := &game.Vector{AngleInRadian: direction.AngleInRadian, Length: direction.Length}
-	down := &game.Vector{AngleInRadian: direction.AngleInRadian + math.Pi, Length: direction.Length}
-	right := &game.Vector{AngleInRadian: direction.AngleInRadian + math.Pi/2, Length: direction.Length}
-	left := &game.Vector{AngleInRadian: direction.AngleInRadian + 3*math.Pi/2, Length: direction.Length}
+	// Old
+	//up := &game.Vector{AngleInRadian: direction.AngleInRadian, Length: direction.Length}
+	//down := &game.Vector{AngleInRadian: direction.AngleInRadian + math.Pi, Length: direction.Length}
+	//right := &game.Vector{AngleInRadian: direction.AngleInRadian + math.Pi/2, Length: direction.Length}
+	//left := &game.Vector{AngleInRadian: direction.AngleInRadian + 3*math.Pi/2, Length: direction.Length}
+	up := &game.Vector{AngleInRadian: -math.Pi / 2, Length: direction.Length}
+	down := &game.Vector{AngleInRadian: math.Pi / 2, Length: direction.Length}
+	left := &game.Vector{AngleInRadian: math.Pi, Length: direction.Length}
+	right := &game.Vector{AngleInRadian: 0, Length: direction.Length}
 	vector := &game.Vector{AngleInRadian: 0, Length: 0}
 	if data.Movement.Up {
 		vector = vector.Add(up)

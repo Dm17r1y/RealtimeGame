@@ -14,7 +14,7 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 		Host string
 		MaxWidth int
 		MaxHeight int
-	}{host + ":" + string(port), game.MAX_WIDTH, game.MAX_HEIGHT}
+	}{host + ":" + strconv.Itoa(port), game.MAX_WIDTH, game.MAX_HEIGHT}
 
 	mainTemplate, err := template.ParseFiles("templates/main.html")
 	if err != nil {
