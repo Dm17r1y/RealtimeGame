@@ -1,5 +1,5 @@
 
-function render(currentLocation, allObjects) {
+function render(allObjects) {
     let canvas = document.getElementById("map");
     let context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -24,8 +24,8 @@ function drawBorders(ctx, canvasWidth, canvasHeight, borderWidth) {
 }
 
 function drawPlayer(ctx, player) {
-    drawPlayerBody(ctx, player.point.x, player.point.y);
-    drawPlayerGun(ctx, player.point.x, player.point.y, 25, player.direction)
+    drawPlayerBody(ctx, player.position.x, player.position.y);
+    drawPlayerGun(ctx, player.position.x, player.position.y, 25, player.direction)
 }
 
 function drawPlayerBody(ctx, x, y) {
@@ -53,5 +53,5 @@ function drawPlayerGun(ctx, x, y, length, rotationAngle) {
 
 function drawBullet(ctx, bullet) {
     ctx.fillStyle = "yellow";
-    ctx.fillRect(bullet.point.x - 5, bullet.point.y - 5, 10, 10);
+    ctx.fillRect(bullet.position.x - 5, bullet.position.y - 5, 10, 10);
 }

@@ -7,14 +7,17 @@ import (
 	"time"
 )
 
+var DELAY = time.Millisecond * 1000 / 60
+
 func main() {
 	g := game.NewGame()
 	go startServer()
 
-	ticker := time.NewTicker(time.Millisecond * 1000 / 60)
+	ticker := time.NewTicker(DELAY)
 	var wg sync.WaitGroup
 
 	wg.Add(1)
+	tickNumber := 0
 	go func() {
 		defer wg.Done()
 		for {
@@ -23,7 +26,8 @@ func main() {
 				newControllers := ReadFromConnections(Controllers, g)
 				UpdateConnections(newControllers)
 				g.MakeTurn()
-				WriteToConnections(Controllers, g)
+				WriteToConnections(Controllers, g, tickNumber)
+				tickNumber = tickNumber + 1
 			}
 		}
 	}()
@@ -34,18 +38,18 @@ func ReadFromConnections(controllers []*Controller, game *game.Game) []*Controll
 	aliveConnections := make([]*Controller, 0)
 	for i := 0; i < len(controllers); i++ {
 		controller := controllers[i]
-		brealFlag := false
-		for !brealFlag {
+		breakFlag := false
+		for !breakFlag {
 			select {
-			case message := <-controller.readChannel:
-				if message == nil {
-					brealFlag = true
+			case message, ok := <-controller.readChannel:
+				if !ok {
+					breakFlag = true
 					break
 				}
 				ApplyCommand(controller, game, message)
 			default:
 				aliveConnections = append(aliveConnections, controller)
-				brealFlag = true
+				breakFlag = true
 			}
 		}
 	}
@@ -90,11 +94,11 @@ func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 	}
 }
 
-func WriteToConnections(controllers []*Controller, game *game.Game) {
+func WriteToConnections(controllers []*Controller, game *game.Game, tickNumber int) {
 	for i := 0; i < len(controllers); i++ {
 		controller := controllers[i]
 		select {
-			case controller.writeChannel <- GetGlobalState(game, controller.model):
+			case controller.writeChannel <- GetGlobalState(game, controller.model, tickNumber):
 			default:
 		}
 	}

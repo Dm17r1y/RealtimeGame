@@ -59,11 +59,15 @@ type State struct {
 
 type GlobalState struct {
 	states   []*State
+	indexInArray int
 	position *game.Point
+	tickNumber int
 }
 
-func GetGlobalState(g *game.Game, model *game.PlayerModel) *GlobalState {
+// TODO: refactor and optimize it
+func GetGlobalState(g *game.Game, model *game.PlayerModel, tickNumber int) *GlobalState {
 	states := make([]*State, 0)
+	indexInArray := -1
 	for i := 0; i < len(g.GameObjects); i++ {
 		object := g.GameObjects[i]
 		var objectType string
@@ -73,8 +77,10 @@ func GetGlobalState(g *game.Game, model *game.PlayerModel) *GlobalState {
 			objectType = "Bullet"
 		case *game.PlayerModel:
 			objectType = "Player"
+			if model == object {
+				indexInArray = i
+			}
 		}
-
 		states = append(states, &State{point: object.GetPosition(), direction: object.GetDirection(),
 			objectType: objectType})
 	}
@@ -84,18 +90,18 @@ func GetGlobalState(g *game.Game, model *game.PlayerModel) *GlobalState {
 	} else {
 		position = model.GetPosition()
 	}
-	return &GlobalState{states, position}
+	return &GlobalState{states, indexInArray, position, tickNumber}
 }
 
 func (state *GlobalState) ToJsonMap() map[string]interface{} {
 	jsonMap := make(map[string]interface{})
-	jsonMap["myLocation"] = map[string]int{"x": int(state.position.X), "y": int(state.position.Y)}
+	jsonMap["stateIndex"] = state.indexInArray
 	data := make([]map[string]interface{}, 0)
 	for i := 0; i < len(state.states); i++ {
 		currentState := state.states[i]
 		stateMap := make(map[string]interface{})
 		stateMap["objectType"] = currentState.objectType
-		stateMap["point"] = map[string]int{
+		stateMap["position"] = map[string]int{
 			"x": int(currentState.point.X),
 			"y": int(currentState.point.Y),
 		}
@@ -103,5 +109,6 @@ func (state *GlobalState) ToJsonMap() map[string]interface{} {
 		data = append(data, stateMap)
 	}
 	jsonMap["render"] = data
+	jsonMap["tick"] = state.tickNumber
 	return jsonMap
 }

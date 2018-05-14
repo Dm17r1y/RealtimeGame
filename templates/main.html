@@ -5,8 +5,10 @@
 </head>
 <body>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="/static/game.js" data-host="{{.Host}}"></script>
+    <script src="/static/game.js" data-host="{{.Host}}" data-delay="{{.Delay}}"></script>
     <script src="/static/render.js"></script>
+    <script src="/static/geometry.js"></script>
+    <script src="/static/queue.js"></script>
     <canvas id="map", width={{.MaxWidth}}, height={{.MaxHeight}}>
 
     </canvas>
