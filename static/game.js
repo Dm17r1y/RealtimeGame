@@ -5,7 +5,7 @@ $(document).ready(function () {
     let conn = new WebSocket("ws://" + host + "/ws");
     let currentState = {render: [], stateIndex: -1, tick: 0};
     let commands = new Queue();
-    let tick = 0;
+    let tick = null;
 
     let movement = {
         up: false,
@@ -74,17 +74,19 @@ $(document).ready(function () {
 
             state = ApplyCommand(state, commands.getData(i));
         }
+        tick = state.tick;
         currentState = state;
     };
 
     setInterval(function () {
+        if (tick == null)
+            return
         let command = {"movement": movement, "mouseLocation": mouseLocation, "shoot": shoot};
         conn.send(JSON.stringify(command));
         shoot = false;
         commands.enqueue({"command": command, "tick": tick});
         currentState = ApplyCommand(currentState, command);
         render(currentState.render);
-        tick++
     }, delay)
 });
 
