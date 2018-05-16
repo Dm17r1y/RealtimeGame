@@ -15,8 +15,9 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 		MaxWidth  int
 		MaxHeight int
 		Delay     int
+		PlayerSpeed int
 	}{host + ":" + strconv.Itoa(port), game.MAX_WIDTH, game.MAX_HEIGHT,
-		int(DELAY.Nanoseconds() / 1000000)}
+		int(DELAY.Nanoseconds() / 1000000), game.PLAYER_SPEED}
 
 	mainTemplate, err := template.ParseFiles("templates/main.html")
 	if err != nil {

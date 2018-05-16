@@ -28,3 +28,7 @@ Vector.prototype.Normallize = function () {
         return new Vector(0, 0);
     return new Vector(this.Angle, 1);
 };
+
+Vector.prototype.MultiplyByScalar = function (scalar) {
+    return new Vector(this.Angle, this.Length * scalar)
+}

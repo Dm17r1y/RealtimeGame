@@ -2,6 +2,7 @@ $(document).ready(function () {
     let attrs = $("script[src*=game]");
     let host = attrs.attr("data-host");
     let delay = attrs.attr("data-delay");
+    let playerSpeed = attrs.attr("data-player-speed");
     let conn = new WebSocket("ws://" + host + "/ws");
     let currentState = {render: [], stateIndex: -1, tick: 0};
     let commands = new Queue();
@@ -72,7 +73,7 @@ $(document).ready(function () {
 
         for(let i = 0; state.tick + i < tick && i < commands.size(); i++) {
 
-            state = ApplyCommand(state, commands.getData(i));
+            state = ApplyCommand(state, commands.getData(i), playerSpeed);
         }
         tick = state.tick;
         currentState = state;
@@ -85,12 +86,12 @@ $(document).ready(function () {
         conn.send(JSON.stringify(command));
         shoot = false;
         commands.enqueue({"command": command, "tick": tick});
-        currentState = ApplyCommand(currentState, command);
+        currentState = ApplyCommand(currentState, command, playerSpeed);
         render(currentState.render);
     }, delay)
 });
 
-function ApplyCommand(state, command) {
+function ApplyCommand(state, command, playerSpeed) {
     if (state.stateIndex === -1)
         return;
     let stateCopy = $.extend(true, {}, state);
@@ -115,7 +116,7 @@ function ApplyCommand(state, command) {
         movement = movement.Add(down)
     }
 
-    movement = movement.Normallize();
+    movement = movement.Normallize().MultiplyByScalar(playerSpeed);
     player.position.x += movement.GetX();
     player.position.y += movement.GetY();
 
