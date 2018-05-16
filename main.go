@@ -17,7 +17,6 @@ func main() {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	tickNumber := 0
 	go func() {
 		defer wg.Done()
 		for {
@@ -26,8 +25,7 @@ func main() {
 				newControllers := ReadFromConnections(Controllers, g)
 				UpdateConnections(newControllers)
 				g.MakeTurn()
-				WriteToConnections(Controllers, g, tickNumber)
-				tickNumber = tickNumber + 1
+				WriteToConnections(Controllers, g)
 			}
 		}
 	}()
@@ -94,13 +92,13 @@ func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 	}
 }
 
-func WriteToConnections(controllers []*Controller, game *game.Game, tickNumber int) {
+func WriteToConnections(controllers []*Controller, g *game.Game) {
+	states := GetStates(g)
 	for i := 0; i < len(controllers); i++ {
 		controller := controllers[i]
 		select {
-			case controller.writeChannel <- GetGlobalState(game, controller.model, tickNumber):
-			default:
+		case controller.writeChannel <- GetGlobalState(states, controller.model, g.Tick):
+		default:
 		}
 	}
 }
-

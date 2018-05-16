@@ -12,12 +12,12 @@ const PLAYER_SPEED = 3
 var defaultCommand = Command{nil}
 
 func NewPlayer(point *Point, currentGame *Game) *PlayerModel {
-	return &PlayerModel{GameObject {
-		position: point,
+	return &PlayerModel{GameObject{
+		position:          point,
 		movementDirection: NewVector(0, 0),
-		direction: NewVector(0, 0),
-		areaRadius: PLAYER_RADIUS,
-		isDead: false,
+		direction:         NewVector(0, 0),
+		areaRadius:        PLAYER_RADIUS,
+		isDead:            false,
 	}, currentGame, &defaultCommand}
 }
 

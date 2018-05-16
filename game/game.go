@@ -7,13 +7,14 @@ import (
 
 type Game struct {
 	GameObjects []IGameObject
+	Tick int
 }
 
 const MAX_WIDTH = 1000
 const MAX_HEIGHT = 500
 
 func NewGame() *Game {
-	return &Game{GameObjects: make([]IGameObject, 0)}
+	return &Game{GameObjects: make([]IGameObject, 0), Tick: 0}
 }
 
 func (game *Game) AddGameObject(gameObject IGameObject) {
@@ -90,4 +91,5 @@ func (game *Game) MakeTurn() {
 	}
 
 	game.GameObjects = newObjects
+	game.Tick++
 }

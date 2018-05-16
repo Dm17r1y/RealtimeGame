@@ -55,19 +55,19 @@ type State struct {
 	objectType string
 	point      *game.Point
 	direction  *game.Vector
+	object 	   game.IGameObject
 }
 
 type GlobalState struct {
-	states   []*State
+	states       []*State
 	indexInArray int
-	position *game.Point
-	tickNumber int
+	position     *game.Point
+	tickNumber   int
 }
 
-// TODO: refactor and optimize it
-func GetGlobalState(g *game.Game, model *game.PlayerModel, tickNumber int) *GlobalState {
+func GetStates(g *game.Game) []*State {
+
 	states := make([]*State, 0)
-	indexInArray := -1
 	for i := 0; i < len(g.GameObjects); i++ {
 		object := g.GameObjects[i]
 		var objectType string
@@ -75,14 +75,29 @@ func GetGlobalState(g *game.Game, model *game.PlayerModel, tickNumber int) *Glob
 		switch object.(type) {
 		case *game.Bullet:
 			objectType = "Bullet"
+		case *game.FastBullet:
+			objectType = "FastBullet"
 		case *game.PlayerModel:
 			objectType = "Player"
-			if model == object {
-				indexInArray = i
-			}
 		}
-		states = append(states, &State{point: object.GetPosition(), direction: object.GetDirection(),
-			objectType: objectType})
+		currentState := &State{
+			point: object.GetPosition(),
+			direction: object.GetDirection(),
+			objectType: objectType,
+			object: object,
+		}
+		states = append(states, currentState)
+	}
+	return states
+}
+
+func GetGlobalState(states []*State, model *game.PlayerModel, tickNumber int) *GlobalState {
+	indexInArray := -1
+	for i := 0; i < len(states); i++ {
+		if states[i].object == model {
+			indexInArray = i
+			break
+		}
 	}
 	var position *game.Point
 	if model == nil {

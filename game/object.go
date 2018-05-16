@@ -9,6 +9,7 @@ type IGameObject interface {
 	GetDirection() *Vector
 	GetAreaRadius() float64
 	CreateNewObject() IGameObject
+	Die()
 }
 
 type GameObject struct {
@@ -33,4 +34,8 @@ func (object *GameObject) GetDirection() *Vector {
 
 func (object *GameObject) GetAreaRadius() float64 {
 	return object.areaRadius
+}
+
+func (object *GameObject) Die() {
+	object.isDead = true
 }

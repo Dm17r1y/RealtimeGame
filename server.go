@@ -1,22 +1,22 @@
 package main
 
 import (
+	"./game"
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"
 	"html/template"
 	"net/http"
-	"./game"
 	"strconv"
 )
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
-		Host string
-		MaxWidth int
+		Host      string
+		MaxWidth  int
 		MaxHeight int
-		Delay int
+		Delay     int
 	}{host + ":" + strconv.Itoa(port), game.MAX_WIDTH, game.MAX_HEIGHT,
-	int(DELAY.Nanoseconds() / 1000000)}
+		int(DELAY.Nanoseconds() / 1000000)}
 
 	mainTemplate, err := template.ParseFiles("templates/main.html")
 	if err != nil {

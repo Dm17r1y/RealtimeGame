@@ -6,16 +6,16 @@ type Bullet struct {
 }
 
 const AREA_RADIUS = 5
-const BULLET_SPEED = 15
+const BULLET_SPEED = 12
 
 func NewBullet(position *Point, direction *Vector, owner *PlayerModel) *Bullet {
 	return &Bullet{GameObject{
-		position: position,
+		position:          position,
 		movementDirection: direction,
-		direction: direction,
-		areaRadius: AREA_RADIUS,
-		isDead: false,
-		}, owner}
+		direction:         direction,
+		areaRadius:        AREA_RADIUS,
+		isDead:            false,
+	}, owner}
 }
 
 func (bullet *Bullet) Move() {

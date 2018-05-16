@@ -1,8 +1,8 @@
 package game
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestVector(t *testing.T) {
@@ -56,7 +56,7 @@ func TestPlayerMovement(t *testing.T) {
 func TestPlayerShoot(t *testing.T) {
 	g := NewGame()
 	player := NewPlayer(&Point{0, 0}, g)
-	player.command = &Command{Shoot: &Shoot{NewVector(1, 0)}}
+	player.command = &Command{Shoot: &Shoot{}}
 	g.AddGameObject(player)
 	g.MakeTurn()
 	if len(g.GameObjects) != 2 {

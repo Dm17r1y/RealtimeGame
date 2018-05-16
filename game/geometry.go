@@ -1,8 +1,8 @@
 package game
 
 import (
-	"math"
 	"fmt"
+	"math"
 )
 
 type Point struct {
@@ -58,6 +58,45 @@ func (vector *Vector) MultiplyByScalar(scalar float64) *Vector {
 
 func (vector Vector) String() string {
 	return fmt.Sprintf("Vector(%.1f, %.1f)", vector.GetX(), vector.GetY())
+}
+
+func GetDistanceToLineSegment(point *Point, startLine *Point, endLine *Point) float64 {
+	isPerpendicularInLineSegment := func(point *Point, startLine *Point, endLine *Point) bool {
+		firstVector := NewVector(point.X - startLine.X, point.Y - startLine.Y)
+		secondVector := NewVector(endLine.X - startLine.X, endLine.Y - startLine.Y)
+		if GetAngleBetweenVectors(firstVector, secondVector) > math.Pi / 2 {
+			return false
+		}
+		firstVector = NewVector(point.X - endLine.X, point.Y - endLine.Y)
+		secondVector = NewVector(startLine.X - endLine.X, startLine.Y - endLine.Y)
+		if GetAngleBetweenVectors(firstVector, secondVector) > math.Pi / 2 {
+			return false
+		}
+		return true
+	}
+
+	if isPerpendicularInLineSegment(point, startLine, endLine) {
+		x0 := point.X
+		y0 := point.Y
+		x1 := startLine.X
+		y1 := startLine.Y
+		x2 := endLine.X
+		y2 := endLine.Y
+		return math.Abs(((y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1) /
+			math.Sqrt((y2 - y1)*(y2 - y1) + (x2 - x1)*(x2 - x1)))
+	}
+	return math.Min(point.GetDistance(startLine), point.GetDistance(endLine))
+}
+
+func GetAngleBetweenVectors(vector1 *Vector, vector2 *Vector) float64 {
+	if vector1.Length == 0 || vector2.Length == 0 {
+		return math.Pi / 2
+	}
+	return math.Acos(GetScalarProduct(vector1, vector2) / (vector1.Length * vector2.Length))
+}
+
+func GetScalarProduct(vector1 *Vector, vector2 *Vector) float64 {
+	return vector1.GetX() * vector2.GetX() + vector1.GetY() * vector2.GetY()
 }
 
 func (vector *Vector) Normalize() *Vector {
