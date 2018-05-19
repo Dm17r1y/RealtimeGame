@@ -58,9 +58,10 @@ func (model *PlayerModel) Reload() {
 }
 
 func (model *PlayerModel) CanShoot() bool {
-	return model.weapon.CanShoot()
+	return model.command.Shoot != nil && model.weapon.CanShoot()
 }
 
 func (model *PlayerModel) Shoot() IGameObject {
+	model.command.Shoot = nil
 	return model.weapon.Shoot(model)
 }

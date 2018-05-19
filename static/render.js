@@ -6,13 +6,27 @@ function render(allObjects) {
     drawBorders(context, canvas.width, canvas.height, 3);
     for(let i in allObjects) {
         let obj = allObjects[i];
-        if (obj["objectType"] === "Player") {
+        if (obj.objectType === "Player") {
             drawPlayer(context, obj);
         }
-        if (obj["objectType"] === "Bullet") {
+        if (obj.objectType === "Bullet") {
             drawBullet(context, obj);
         }
+        if (obj.objectType === "FastBullet") {
+            drawFastBullet(context, obj)
+        }
     }
+}
+
+function drawFastBullet(ctx, bullet) {
+    ctx.beginPath();
+    ctx.moveTo(bullet.position.x, bullet.position.y);
+    endPosition = NewVector(bullet.position.x, bullet.position.y)
+        .Add(new Vector(bullet.direction, 1)
+        .MultiplyByScalar(1000));
+    ctx.lineTo(endPosition.GetX(), endPosition.GetY());
+    ctx.strokeStyle = "blue";
+    ctx.stroke()
 }
 
 function drawBorders(ctx, canvasWidth, canvasHeight, borderWidth) {

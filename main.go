@@ -57,7 +57,10 @@ func ReadFromConnections(controllers []*Controller, game *game.Game) []*Controll
 
 func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 	if controller.model == nil || controller.model.IsDead() {
-		controller.model = game.NewPlayer(g.GetRandomPoint(), g)
+		weapon := game.NewWeapon(func(model *game.PlayerModel) game.IGameObject {
+			return game.NewFastBullet(model.GetPosition(), model.GetDirection(), model)
+		}, 60)
+		controller.model = game.NewPlayer(g.GetRandomPoint(), g, weapon)
 		g.AddGameObject(controller.model)
 	}
 	direction := game.NewVector(data.MouseLocation.X-controller.model.GetPosition().X,
