@@ -11,13 +11,15 @@ type FastBullet struct {
 	position *Point
 	shootDirection *Vector
 	lifeTime int
+	owner *PlayerModel
 }
 
-func NewFastBullet(position *Point, shootDirection *Vector) *FastBullet {
+func NewFastBullet(position *Point, shootDirection *Vector, owner *PlayerModel) *FastBullet {
 	return &FastBullet{
 		position: position,
 		shootDirection: shootDirection.Normalize(),
 		lifeTime: FAST_BULLET_LIVE_TIME,
+		owner: owner,
 	}
 }
 
@@ -26,14 +28,21 @@ func (bullet *FastBullet) Move() {
 }
 
 func (bullet *FastBullet) SolveCollision(otherObject IGameObject) {
-	if bullet.lifeTime != FAST_BULLET_LIVE_TIME - 1 {
-		return
+	switch player := otherObject.(type) {
+	case *PlayerModel:
+		if player == bullet.owner {
+			return
+		}
+		if bullet.lifeTime != FAST_BULLET_LIVE_TIME {
+			return
+		}
+		startPoint := bullet.position
+		endPoint := bullet.position.AddVector(bullet.GetDirection().MultiplyByScalar(FAST_BULLET_SHOOT_RANGE))
+		if GetDistanceToLineSegment(player.GetPosition(), startPoint, endPoint) <= player.GetAreaRadius() {
+			player.Die()
+		}
 	}
-	startPoint := bullet.position
-	endPoint := bullet.position.AddVector(bullet.GetDirection().MultiplyByScalar(FAST_BULLET_SHOOT_RANGE))
-	if GetDistanceToLineSegment(otherObject.GetPosition(), startPoint, endPoint) <= otherObject.GetAreaRadius() {
-		otherObject.Die()
-	}
+
 }
 
 func (bullet *FastBullet) IsDead() bool {
@@ -54,10 +63,6 @@ func (bullet *FastBullet) GetDirection() *Vector {
 
 func (bullet *FastBullet) GetAreaRadius() float64 {
 	return math.MaxFloat64
-}
-
-func (bullet *FastBullet) CreateNewObject() IGameObject {
-	return nil
 }
 
 func (bullet *FastBullet) Die() {

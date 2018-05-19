@@ -8,8 +8,6 @@ type IGameObject interface {
 	GetMovementDirection() *Vector
 	GetDirection() *Vector
 	GetAreaRadius() float64
-	CreateNewObject() IGameObject
-	Die()
 }
 
 type GameObject struct {

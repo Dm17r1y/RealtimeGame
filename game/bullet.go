@@ -8,7 +8,12 @@ type Bullet struct {
 const AREA_RADIUS = 5
 const BULLET_SPEED = 12
 
+var defaultDirection = NewVector(1, 0)
+
 func NewBullet(position *Point, direction *Vector, owner *PlayerModel) *Bullet {
+	if direction.Length == 0 {
+		direction = defaultDirection
+	}
 	return &Bullet{GameObject{
 		position:          position,
 		movementDirection: direction,
@@ -30,8 +35,4 @@ func (bullet *Bullet) SolveCollision(object IGameObject) {
 
 func (bullet *Bullet) GetMovementDirection() *Vector {
 	return bullet.movementDirection.MultiplyByScalar(BULLET_SPEED)
-}
-
-func (bullet *Bullet) CreateNewObject() IGameObject {
-	return nil
 }

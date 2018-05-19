@@ -62,9 +62,13 @@ func (game *Game) MakeTurn() {
 	newObjects := make([]IGameObject, 0)
 
 	for _, object := range objects {
-		newObject := object.CreateNewObject()
-		if newObject != nil {
-			newObjects = append(newObjects, newObject)
+		switch player := object.(type) {
+		case *PlayerModel:
+			if player.CanShoot() {
+				newObjects = append(newObjects, player.Shoot())
+			} else {
+				player.Reload()
+			}
 		}
 	}
 
