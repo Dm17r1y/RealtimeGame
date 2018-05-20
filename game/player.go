@@ -4,7 +4,7 @@ type PlayerModel struct {
 	GameObject
 	currentGame *Game
 	command     *Command
-	weapon 	    *Weapon
+	weapon      *Weapon
 }
 
 const PLAYER_RADIUS = 25

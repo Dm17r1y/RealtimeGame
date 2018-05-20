@@ -1,8 +1,8 @@
 package game
 
 type Weapon struct {
-	GetBullet func(model *PlayerModel) IGameObject
-	reloadTime int
+	GetBullet     func(model *PlayerModel) IGameObject
+	reloadTime    int
 	reloadProcess int
 }
 

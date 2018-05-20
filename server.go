@@ -11,10 +11,10 @@ import (
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
-		Host      string
-		MaxWidth  int
-		MaxHeight int
-		Delay     int
+		Host        string
+		MaxWidth    int
+		MaxHeight   int
+		Delay       int
 		PlayerSpeed int
 	}{host + ":" + strconv.Itoa(port), game.MAX_WIDTH, game.MAX_HEIGHT,
 		int(DELAY.Nanoseconds() / 1000000), game.PLAYER_SPEED}

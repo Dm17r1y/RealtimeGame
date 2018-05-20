@@ -5,7 +5,6 @@ import (
 	"testing"
 )
 
-
 func TestVector(t *testing.T) {
 	v := NewVector(40, 0)
 	if v.Length != 40.0 {

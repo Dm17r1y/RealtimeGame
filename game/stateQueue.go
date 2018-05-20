@@ -19,7 +19,7 @@ func (q *FixedSizeQueue) Push(state *GameState) {
 		q.head++
 		q.count--
 	}
-	q.objects[(q.head + q.count) % q.size] = state
+	q.objects[(q.head+q.count)%q.size] = state
 }
 
 func (q *FixedSizeQueue) GetItem(depth int) *GameState {
@@ -29,5 +29,5 @@ func (q *FixedSizeQueue) GetItem(depth int) *GameState {
 	if depth >= q.count {
 		return q.objects[q.head]
 	}
-	return q.objects[q.head + q.count - depth]
+	return q.objects[q.head+q.count-depth]
 }

@@ -62,14 +62,14 @@ func (vector Vector) String() string {
 
 func GetDistanceToLineSegment(point *Point, startLine *Point, endLine *Point) float64 {
 	isPerpendicularInLineSegment := func(point *Point, startLine *Point, endLine *Point) bool {
-		firstVector := NewVector(point.X - startLine.X, point.Y - startLine.Y)
-		secondVector := NewVector(endLine.X - startLine.X, endLine.Y - startLine.Y)
-		if GetAngleBetweenVectors(firstVector, secondVector) > math.Pi / 2 {
+		firstVector := NewVector(point.X-startLine.X, point.Y-startLine.Y)
+		secondVector := NewVector(endLine.X-startLine.X, endLine.Y-startLine.Y)
+		if GetAngleBetweenVectors(firstVector, secondVector) > math.Pi/2 {
 			return false
 		}
-		firstVector = NewVector(point.X - endLine.X, point.Y - endLine.Y)
-		secondVector = NewVector(startLine.X - endLine.X, startLine.Y - endLine.Y)
-		if GetAngleBetweenVectors(firstVector, secondVector) > math.Pi / 2 {
+		firstVector = NewVector(point.X-endLine.X, point.Y-endLine.Y)
+		secondVector = NewVector(startLine.X-endLine.X, startLine.Y-endLine.Y)
+		if GetAngleBetweenVectors(firstVector, secondVector) > math.Pi/2 {
 			return false
 		}
 		return true
@@ -82,8 +82,8 @@ func GetDistanceToLineSegment(point *Point, startLine *Point, endLine *Point) fl
 		y1 := startLine.Y
 		x2 := endLine.X
 		y2 := endLine.Y
-		return math.Abs(((y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1) /
-			math.Sqrt((y2 - y1)*(y2 - y1) + (x2 - x1)*(x2 - x1)))
+		return math.Abs(((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) /
+			math.Sqrt((y2-y1)*(y2-y1)+(x2-x1)*(x2-x1)))
 	}
 	return math.Min(point.GetDistance(startLine), point.GetDistance(endLine))
 }
@@ -96,7 +96,7 @@ func GetAngleBetweenVectors(vector1 *Vector, vector2 *Vector) float64 {
 }
 
 func GetScalarProduct(vector1 *Vector, vector2 *Vector) float64 {
-	return vector1.GetX() * vector2.GetX() + vector1.GetY() * vector2.GetY()
+	return vector1.GetX()*vector2.GetX() + vector1.GetY()*vector2.GetY()
 }
 
 func (vector *Vector) Normalize() *Vector {

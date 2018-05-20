@@ -57,7 +57,7 @@ type State struct {
 	objectType string
 	point      *game.Point
 	direction  *game.Vector
-	object 	   game.IGameObject
+	object     game.IGameObject
 }
 
 type GlobalState struct {
@@ -83,10 +83,10 @@ func GetStates(g *game.Game) []*State {
 			objectType = "Player"
 		}
 		currentState := &State{
-			point: object.GetPosition(),
-			direction: object.GetDirection(),
+			point:      object.GetPosition(),
+			direction:  object.GetDirection(),
 			objectType: objectType,
-			object: object,
+			object:     object,
 		}
 		states = append(states, currentState)
 	}

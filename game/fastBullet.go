@@ -8,18 +8,18 @@ const FAST_BULLET_LIVE_TIME = 30
 const FAST_BULLET_SHOOT_RANGE = 2000
 
 type FastBullet struct {
-	position *Point
+	position       *Point
 	shootDirection *Vector
-	lifeTime int
-	owner *PlayerModel
+	lifeTime       int
+	owner          *PlayerModel
 }
 
 func NewFastBullet(position *Point, shootDirection *Vector, owner *PlayerModel) *FastBullet {
 	return &FastBullet{
-		position: position,
+		position:       position,
 		shootDirection: shootDirection.Normalize(),
-		lifeTime: FAST_BULLET_LIVE_TIME,
-		owner: owner,
+		lifeTime:       FAST_BULLET_LIVE_TIME,
+		owner:          owner,
 	}
 }
 

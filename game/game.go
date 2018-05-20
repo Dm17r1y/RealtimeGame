@@ -6,7 +6,7 @@ import (
 )
 
 type GameState struct {
-	tick int
+	tick    int
 	objects []IGameObject
 }
 
@@ -14,8 +14,8 @@ const STATE_QUEUE_MAX_LENGTH = 20
 
 type Game struct {
 	GameObjects []IGameObject
-	Queue *FixedSizeQueue
-	Tick int
+	Queue       *FixedSizeQueue
+	Tick        int
 }
 
 const MAX_WIDTH = 1000
@@ -62,7 +62,7 @@ func (game *Game) MakeTurn() {
 
 	state := &GameState{
 		objects: game.GameObjects,
-		tick: game.Tick,
+		tick:    game.Tick,
 	}
 	game.Queue.Push(state)
 
