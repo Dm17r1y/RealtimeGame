@@ -91,7 +91,7 @@ func ApplyCommand(controller *Controller, g *game.Game, data *MessageData) {
 	controller.model.SetMovement(vector.Normalize())
 
 	if data.Shoot {
-		controller.model.SetCommand(&game.Command{&game.Shoot{}})
+		controller.model.SetCommand(&game.Command{&game.Shoot{data.ClientTick}})
 	}
 }
 

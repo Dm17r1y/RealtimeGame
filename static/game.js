@@ -81,8 +81,8 @@ $(document).ready(function () {
 
     setInterval(function () {
         if (tick == null)
-            return
-        let command = {"movement": movement, "mouseLocation": mouseLocation, "shoot": shoot};
+            return;
+        let command = {"movement": movement, "mouseLocation": mouseLocation, "shoot": shoot, "tick": tick};
         conn.send(JSON.stringify(command));
         shoot = false;
         commands.enqueue({"command": command, "tick": tick});

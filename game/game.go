@@ -5,8 +5,16 @@ import (
 	"time"
 )
 
+type GameState struct {
+	tick int
+	objects []IGameObject
+}
+
+const STATE_QUEUE_MAX_LENGTH = 20
+
 type Game struct {
 	GameObjects []IGameObject
+	Queue *FixedSizeQueue
 	Tick int
 }
 
@@ -14,7 +22,7 @@ const MAX_WIDTH = 1000
 const MAX_HEIGHT = 500
 
 func NewGame() *Game {
-	return &Game{GameObjects: make([]IGameObject, 0), Tick: 0}
+	return &Game{GameObjects: make([]IGameObject, 0), Tick: 0, Queue: NewStateQueue(STATE_QUEUE_MAX_LENGTH)}
 }
 
 func (game *Game) AddGameObject(gameObject IGameObject) {
@@ -52,6 +60,12 @@ func normallize(num float64, min float64, max float64) float64 {
 
 func (game *Game) MakeTurn() {
 
+	state := &GameState{
+		objects: game.GameObjects,
+		tick: game.Tick,
+	}
+	game.Queue.Push(state)
+
 	objects := make([]IGameObject, len(game.GameObjects))
 	copy(objects, game.GameObjects)
 
@@ -65,7 +79,10 @@ func (game *Game) MakeTurn() {
 		switch player := object.(type) {
 		case *PlayerModel:
 			if player.CanShoot() {
-				newObjects = append(newObjects, player.Shoot())
+				tick := player.command.Shoot.ClientTick
+				bullet := player.Shoot()
+				game.HandleShoot(tick, bullet)
+				newObjects = append(newObjects, bullet)
 			} else {
 				player.Reload()
 			}
@@ -96,4 +113,18 @@ func (game *Game) MakeTurn() {
 
 	game.GameObjects = newObjects
 	game.Tick++
+}
+
+func (game *Game) HandleShoot(tick int, bullet IGameObject) {
+	state := game.Queue.GetItem(game.Tick - tick)
+	if state != nil {
+		for _, object := range state.objects {
+			if game.isCollide(object, bullet) {
+				object.SolveCollision(bullet)
+			}
+			if game.isCollide(bullet, object) {
+				bullet.SolveCollision(object)
+			}
+		}
+	}
 }

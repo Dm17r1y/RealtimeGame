@@ -4,4 +4,6 @@ type Command struct {
 	Shoot *Shoot
 }
 
-type Shoot struct{}
+type Shoot struct {
+	ClientTick int
+}

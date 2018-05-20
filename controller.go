@@ -37,6 +37,7 @@ type MessageData struct {
 	Movement      *MovementData
 	MouseLocation *game.Point
 	Shoot         bool
+	ClientTick    int
 }
 
 func NewMessageData(jsonData map[string]interface{}) *MessageData {
@@ -45,10 +46,11 @@ func NewMessageData(jsonData map[string]interface{}) *MessageData {
 	mouseLocationJSON := jsonData["mouseLocation"].(map[string]interface{})
 
 	mouseLocation := game.Point{X: mouseLocationJSON["x"].(float64), Y: mouseLocationJSON["y"].(float64)}
+	clientTick := int(jsonData["tick"].(float64))
 
 	return &MessageData{&MovementData{Up: movementJSON["up"].(bool), Down: movementJSON["down"].(bool),
 		Left: movementJSON["left"].(bool), Right: movementJSON["right"].(bool)}, &mouseLocation,
-		shoot}
+		shoot, clientTick}
 }
 
 type State struct {

@@ -54,6 +54,7 @@ func (model *PlayerModel) GetMovementDirection() *Vector {
 }
 
 func (model *PlayerModel) Reload() {
+	model.command.Shoot = nil
 	model.weapon.Reload()
 }
 
